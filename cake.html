@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Love Garden Birthday</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--img-pattern: url('');
+--img-flowers: url('');
+}
+
+• { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksand', sans-serif; background: #fff5f8; color: #a04868; }
+img { display: block; max-width: 100%; -webkit-user-drag: none; user-select: none; }
+
+/* ===== Scene ===== */
+.scene {
+position: fixed; inset: 0;
+background-color: #fff;
+background-image: var(--img-pattern);
+background-size: 260px;
+background-repeat: repeat;
+overflow: hidden;
+}
+.scene::before {
+content: ''; position: absolute; inset: 0;
+background: linear-gradient(180deg, rgba(255,228,235,0.5) 0%, rgba(255,255,255,0) 40%, rgba(255,220,230,0.4) 100%);
+pointer-events: none; z-index: 1;
+}
+
+/* ===== Title ===== */
+.title {
+position: absolute; top: 3%; left: 50%; transform: translateX(-50%);
+font-family: 'Dancing Script', cursive;
+font-size: clamp(22px, 3.5vw, 32px); font-weight: 700;
+color: #c2577f;
+text-shadow: 0 2px 12px rgba(255,255,255,0.9), 0 0 30px rgba(255,200,220,0.5);
+z-index: 50; white-space: nowrap; pointer-events: none;
+}
+
+/* ===== Cake Stage ===== */
+.cake-stage {
+position: absolute; left: 50%; top: 52%;
+transform: translate(-50%, -50%);
+width: min(240px, 40vw);
+z-index: 10;
+}
+.cake-img {
+width: 100%; display: block;
+filter: drop-shadow(0 15px 25px rgba(200,120,140,0.3));
+position: relative; z-index: 2;
+}
+.cake-glow {
+position: absolute; inset: -20% -10% -10% -10%;
+background: radial-gradient(circle at 50% 40%, rgba(255,200,150,0.5) 0%, rgba(255,180,200,0.2) 30%, transparent 70%);
+border-radius: 50%; opacity: 0;
+transition: opacity 1.5s; pointer-events: none;
+z-index: 1; filter: blur(15px);
+}
+.cake-glow.show { opacity: 1; animation: glowPulse 3s ease-in-out infinite; }
+@keyframes glowPulse { 0%,100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.08); opacity: 1; } }
+
+/* ===== Cut Elements ===== */
+.cut-canvas {
+position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+z-index: 4; pointer-events: none;
+}
+.cake-slice {
+position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+z-index: 3; opacity: 0;
+clip-path: polygon(45% 65%, 85% 45%, 98% 90%);
+transition: transform 1.2s cubic-bezier(.5,0,.3,1), opacity 0.3s;
+pointer-events: none;
+}
+.cake-slice img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(200,120,140,0.3)); }
+.cake-slice.active { opacity: 1; }
+.cake-slice.separated { transform: translate(20px, 18px) rotate(12deg); }
+
+/* ===== Candle Slots ===== */
+.slot {
+position: absolute; width: 24px; height: 24px;
+z-index: 11; transform: translate(-50%, -50%);
+pointer-events: none;
+}
+.slot::after {
+content: ''; position: absolute; inset: 0;
+border-radius: 50%;
+border: 2px dashed rgba(200,140,160,0.4);
+background: rgba(255,255,255,0.4);
+opacity: 0; transition: opacity 0.3s, transform 0.3s;
+}
+.slot.hover::after {
+opacity: 1; transform: scale(1.3);
+border-color: rgba(255,140,170,0.9);
+background: rgba(255,200,220,0.5);
+}
+.slot.filled::after { opacity: 0; }
+
+/* ===== Placed Candle ===== */
+.placed-candle {
+position: absolute; width: 18px; height: 32px;
+transform: translate(-50%, -85%);
+z-index: 12; pointer-events: none;
+}
+.candle-anim {
+width: 100%; height: 100%;
+animation: dropIn 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+.placed-candle img {
+width: 100%; height: 100%; object-fit: contain;
+filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15)) brightness(0.6);
+transition: filter 0.6s;
+}
+.placed-candle.lit img {
+filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15)) brightness(1) drop-shadow(0 0 6px rgba(255,180,80,0.9)) drop-shadow(0 0 12px rgba(255,200,100,0.5));
+}
+.placed-candle.lit .candle-anim {
+animation: candleLight 0.6s ease-out, candleFlicker 2.5s ease-in-out infinite 0.6s;
+}
+@keyframes dropIn {
+0% { transform: translateY(-200%) scale(1.4); opacity: 0; }
+50% { transform: translateY(15%) scale(0.95); opacity: 1; }
+75% { transform: translateY(-5%) scale(1.05); }
+100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes candleLight { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+@keyframes candleFlicker { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15); } }
+
+/* ===== Tray ===== */
+.tray {
+position: absolute; left: 50%; bottom: 6%;
+transform: translateX(-50%);
+display: flex; gap: clamp(6px, 1.5vw, 12px);
+padding: clamp(10px, 2vw, 16px) clamp(14px, 3vw, 24px);
+background: rgba(255,255,255,0.65);
+border: 2px dashed rgba(220,140,160,0.5);
+border-radius: 24px;
+backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+z-index: 25;
+box-shadow: 0 12px 35px rgba(220,140,160,0.2), inset 0 1px 0 rgba(255,255,255,0.7);
+transition: opacity 0.6s, transform 0.6s;
+}
+.tray.hide { opacity: 0; transform: translateX(-50%) translateY(20px); pointer-events: none; }
+.tray-label {
+position: absolute; bottom: 100%; left: 50%;
+transform: translateX(-50%); margin-bottom: 8px;
+font-size: 11px; color: #a04868; white-space: nowrap;
+opacity: 0.8; font-weight: 600;
+}
+.tray-candle {
+width: clamp(18px, 3vw, 24px);
+height: clamp(32px, 5vw, 42px);
+cursor: grab; user-select: none;
+transition: transform 0.2s;
+touch-action: none; pointer-events: auto;
+object-fit: contain;
+}
+.tray-candle:hover { transform: scale(1.15) rotate(-5deg); }
+.tray-candle:active { cursor: grabbing; }
+.tray-candle.dragging-source { opacity: 0.3; }
+.tray-candle.used { visibility: hidden; }
+.dragging-ghost {
+position: fixed; z-index: 9999; pointer-events: none;
+transform: scale(1.25) rotate(-5deg);
+filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+object-fit: contain;
+}
+
+/* ===== Messages ===== */
+.message {
+position: absolute; top: 11%; left: 50%;
+transform: translateX(-50%);
+background: rgba(255,255,255,0.75);
+backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+padding: 10px 24px; border-radius: 30px;
+color: #a04868;
+font-size: clamp(13px, 2vw, 16px);
+font-weight: 600; text-align: center;
+box-shadow: 0 10px 30px rgba(200,140,160,0.25);
+border: 1px solid rgba(255,255,255,0.8);
+z-index: 100; opacity: 0;
+transition: opacity 0.6s, transform 0.6s;
+max-width: 90vw; pointer-events: none;
+line-height: 1.4;
+}
+.message.show { opacity: 1; }
+.message.hide { opacity: 0; transform: translateX(-50%) translateY(-15px); }
+
+.progress {
+position: absolute; top: 18%; left: 50%;
+transform: translateX(-50%);
+font-size: 13px; color: #a04868;
+background: rgba(255,255,255,0.75);
+padding: 6px 18px; border-radius: 20px;
+z-index: 100; opacity: 0;
+transition: opacity 0.4s; font-weight: 700;
+box-shadow: 0 4px 12px rgba(200,140,160,0.15);
+letter-spacing: 0.5px;
+pointer-events: none;
+}
+.progress.show { opacity: 1; }
+
+/* ===== Flower Border ===== */
+.flower-border {
+position: absolute; left: 0; bottom: 0;
+width: 100%; height: 11vh;
+display: flex; z-index: 6;
+pointer-events: none; overflow: hidden;
+}
+.flower-tile {
+flex: 1; height: 100%;
+background-image: var(--img-flowers);
+background-size: auto 100%;
+background-repeat: repeat-x;
+opacity: 0;
+transform: scale(0.5) translateY(20%);
+transform-origin: bottom center;
+transition: opacity 0.8s, transform 0.8s cubic-bezier(.34,1.56,.64,1);
+}
+.flower-border.show .flower-tile { opacity: 1; transform: scale(1) translateY(0); }
+
+/* ===== Balloons ===== */
+.balloons {
+position: absolute; left: 3%; top: 20%;
+width: clamp(120px, 14vw, 180px);
+z-index: 7; opacity: 0;
+transform: translateY(80px) rotate(-3deg);
+transition: opacity 1.8s, transform 2s ease-out;
+pointer-events: none;
+filter: drop-shadow(0 8px 18px rgba(200,120,140,0.2));
+}
+.balloons.show {
+opacity: 1; transform: translateY(0) rotate(-3deg);
+animation: balloonFloat 5s ease-in-out infinite;
+}
+@keyframes balloonFloat {
+0%,100% { transform: translateY(0) rotate(-3deg); }
+50% { transform: translateY(-12px) rotate(-1deg); }
+}
+
+/* ===== Floating Hearts ===== */
+.floating-heart {
+position: absolute;
+width: clamp(12px, 1.8vw, 20px);
+opacity: 0; z-index: 8; pointer-events: none;
+transition: opacity 1s;
+}
+.floating-heart.show {
+opacity: 0.7;
+animation: heartFloat 6s ease-in-out infinite;
+}
+@keyframes heartFloat {
+0%,100% { transform: translate(0,0) rotate(0); }
+25% { transform: translate(15px,-20px) rotate(15deg); }
+50% { transform: translate(-10px,-35px) rotate(-10deg); }
+75% { transform: translate(-20px,-15px) rotate(5deg); }
+}
+
+/* ===== Knife ===== */
+.knife-container {
+position: absolute; right: 8%; top: 42%;
+width: clamp(90px, 11vw, 130px);
+z-index: 30; opacity: 0;
+transform: rotate(35deg);
+transition: opacity 0.8s, transform 0.8s;
+cursor: grab; user-select: none; touch-action: none;
+filter: drop-shadow(0 6px 10px rgba(0,0,0,0.2));
+}
+.knife-container.show { opacity: 1; transform: rotate(35deg); }
+.knife-container:active { cursor: grabbing; }
+.knife-container.dragging { transition: none; z-index: 100; transform: rotate(0deg) !important; }
+.knife-container img { width: 100%; pointer-events: none; }
+.knife-hint {
+position: absolute; top: -25px; left: 50%;
+transform: translateX(-50%);
+font-size: 11px; color: #a04868;
+white-space: nowrap; opacity: 0.8;
+animation: hintBounce 1.5s ease-in-out infinite;
+font-weight: 600;
+}
+@keyframes hintBounce {
+0%,100% { transform: translateX(-50%) translateY(0); }
+50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ===== Sparkles ===== */
+.sparkle {
+position: fixed; pointer-events: none; z-index: 14;
+font-size: 16px;
+animation: sparkleAnim 1.2s ease-out forwards;
+}
+@keyframes sparkleAnim {
+0% { transform: scale(0) rotate(0); opacity: 0; }
+20% { transform: scale(1.3) rotate(45deg); opacity: 1; }
+100% { transform: scale(0.5) rotate(180deg); opacity: 0; }
+}
+
+/* ===== Fireworks Canvas ===== */
+#fireworks {
+position: fixed;
+inset: 0;
+z-index: 150;
+pointer-events: none;
+}
+
+/* ===== Celebration Tap To Continue Hint ===== */
+.celebration-hint {
+position: absolute; bottom: 15%; left: 50%;
+transform: translateX(-50%);
+background: rgba(255,255,255,0.85);
+padding: 12px 24px; border-radius: 30px;
+color: #a04868; font-weight: 700;
+z-index: 180; opacity: 0;
+transition: opacity 0.6s;
+pointer-events: none;
+box-shadow: 0 8px 20px rgba(200,140,160,0.3);
+}
+.celebration-hint.show { opacity: 1; animation: hintPulse 1.5s infinite; }
+@keyframes hintPulse {
+0%,100% { transform: translateX(-50%) scale(1); }
+50% { transform: translateX(-50%) scale(1.05); }
+}
+
+/* ===== Final Card ===== */
+.final-card {
+position: fixed; inset: 0;
+display: flex; align-items: center; justify-content: center;
+z-index: 200; opacity: 0; pointer-events: none;
+transition: opacity 1.2s;
+background: rgba(255,225,235,0.3);
+backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.final-card.show { opacity: 1; pointer-events: auto; }
+.card-content {
+background: rgba(255,255,255,0.55);
+backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+border: 1px solid rgba(255,255,255,0.7);
+border-radius: 32px;
+padding: clamp(25px, 4vw, 45px) clamp(30px, 5vw, 60px);
+text-align: center;
+box-shadow: 0 30px 80px rgba(200,140,160,0.35), inset 0 1px 0 rgba(255,255,255,0.8);
+max-width: 90vw;
+transform: scale(0.7) translateY(20px);
+transition: transform 1.2s cubic-bezier(.34,1.56,.64,1);
+}
+.final-card.show .card-content { transform: scale(1) translateY(0); }
+.card-content p {
+font-size: clamp(15px, 2.2vw, 20px);
+color: #8a3a5a; line-height: 1.7;
+margin-bottom: 15px; font-weight: 500;
+}
+.card-content h2 {
+font-family: 'Dancing Script', cursive;
+font-size: clamp(28px, 5vw, 44px);
+color: #c2577f; margin-bottom: 25px; font-weight: 700;
+text-shadow: 0 2px 10px rgba(255,255,255,0.6);
+}
+.continue-btn {
+background: linear-gradient(135deg, #ff8aa8, #ff5c8a);
+color: white; border: none;
+padding: 12px 45px; border-radius: 30px;
+font-size: 16px; font-weight: 700;
+cursor: pointer;
+box-shadow: 0 10px 30px rgba(255,92,138,0.45), inset 0 1px 0 rgba(255,255,255,0.5);
+transition: transform 0.3s, box-shadow 0.3s;
+letter-spacing: 1.5px; font-family: inherit;
+text-transform: uppercase;
+}
+.continue-btn:hover {
+transform: translateY(-3px);
+box-shadow: 0 15px 40px rgba(255,92,138,0.55), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* ===== Mobile Adjustments ===== */
+@media (max-width: 768px) {
+.cake-stage { width: 55vw; top: 54%; }
+.balloons { width: 20vw; top: 24%; }
+.knife-container { width: 18vw; right: 5%; }
+.tray-candle { width: 18px; height: 32px; }
+.placed-candle { width: 16px; height: 28px; }
+}
+@keyframes petalFall {
+0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+100% { transform: translateY(80vh) rotate(360deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop preload="auto" src="https://audio.jukehost.co.uk/019f047e-f045-7374-8237-2f9672e18551"></audio>
+
+<div class="scene" id="scene">
+<div class="title">Love Garden Birthday</div>
+
+<img class="balloons" id="balloons" alt="">
+<div id="heartsContainer"></div>
+
+<div class="cake-stage" id="cakeStage">
+<div class="cake-glow" id="cakeGlow"></div>
+<img class="cake-img" id="cake" alt="Birthday Cake">
+<div class="cake-slice" id="cakeSlice">
+<img alt="" id="sliceImg">
+</div>
+<canvas class="cut-canvas" id="cutCanvas"></canvas>
+</div>
+
+<div class="flower-border" id="flowerBorder"></div>
+
+<div class="tray" id="tray">
+<div class="tray-label">Drag candles to the cake</div>
+</div>
+
+<div class="knife-container" id="knife">
+<div class="knife-hint" id="knifeHint">Drag me!</div>
+<img alt="Knife" id="knifeImg">
+</div>
+
+<div class="message" id="message"></div>
+<div class="progress" id="progress"></div>
+
+<canvas id="fireworks"></canvas>
+
+<div class="celebration-hint" id="celebrationHint">Tap screen 2 times to continue</div>
+
+<div class="final-card" id="finalCard">
+<div class="card-content">
+<p>May your life bloom as beautifully as this garden of hearts.</p>
+<h2>Happy Birthday <span style="color:#ff5c8a">❤</span></h2>
+<button class="continue-btn" id="continueBtn">Continue</button>
+</div>
+</div>
+</div>
+
+<script>
+// ===== Image URLs =====
+const IMAGES = {
+pattern: 'https://i.ibb.co/fz6TVDKD/pattern.png',
+flowers: 'https://i.ibb.co/R4PBrrf3/flowers.png',
+cake: 'https://i.ibb.co/KzR8YF2k/cake.png',
+candle: 'https://i.ibb.co/Lz1hSrK6/candle.png',
+balloons: 'https://i.ibb.co/ZphhBH6p/balloon.png',
+heart: 'https://i.ibb.co/nNmKWVLQ/heart.png',
+knife: 'https://i.ibb.co/W49nnpsJ/knife.png'
+};
+
+// ===== State =====
+const TOTAL_CANDLES = 6;
+const CUT_DURATION = 1000;
+let placedCount = 0;
+let currentStage = 0;
+let cakeCut = false;
+let dragState = null;
+let knifeDrag = null;
+let tapCount = 0;
+let celebrationInterval = null;
+
+// Cutting State
+let cutTime = 0;
+let lastFrameTime = performance.now();
+let lastMoveTime = 0;
+let isInside = false;
+let cutCtx, cutCanvas;
+
+// ===== DOM References =====
+const scene = document.getElementById('scene');
+const cakeStage = document.getElementById('cakeStage');
+const cake = document.getElementById('cake');
+const cakeGlow = document.getElementById('cakeGlow');
+const tray = document.getElementById('tray');
+const balloons = document.getElementById('balloons');
+const flowerBorder = document.getElementById('flowerBorder');
+const knife = document.getElementById('knife');
+const knifeHint = document.getElementById('knifeHint');
+const messageEl = document.getElementById('message');
+const progressEl = document.getElementById('progress');
+const finalCard = document.getElementById('finalCard');
+const heartsContainer = document.getElementById('heartsContainer');
+const cakeSlice = document.getElementById('cakeSlice');
+const sliceImg = document.getElementById('sliceImg');
+const knifeImg = document.getElementById('knifeImg');
+const celebrationHint = document.getElementById('celebrationHint');
+
+// Predefined candle slot positions
+const SLOT_POSITIONS = [
+{ x: 30, y: 25 }, { x: 39, y: 19 }, { x: 48, y: 16 },
+{ x: 56, y: 16 }, { x: 65, y: 19 }, { x: 74, y: 25 }
+];
+
+// ===== Initialization =====
+function init() {
+document.documentElement.style.setProperty('--img-pattern', 'url(' + IMAGES.pattern + ')');
+document.documentElement.style.setProperty('--img-flowers', 'url(' + IMAGES.flowers + ')');
+
+balloons.src = IMAGES.balloons;
+cake.src = IMAGES.cake;
+sliceImg.src = IMAGES.cake;
+knifeImg.src = IMAGES.knife;
+
+buildFlowerBorder();
+buildSlots();
+buildTrayCandles();
+createFloatingHearts();
+setupKnifeDrag();
+setupCanvas();
+
+cutCanvas = document.getElementById('cutCanvas');
+cutCtx = cutCanvas.getContext('2d');
+resizeCutCanvas();
+window.addEventListener('resize', resizeCutCanvas);
+
+document.getElementById('continueBtn').addEventListener('click', function() {
+    window.location.href = "scrapbook.html";
+});
+
+Object.values(IMAGES).forEach(function(src) { var i = new Image(); i.src = src; });
+
+showMessage('Before the celebration begins, place all the candles on the cake.');
+}
+
+function resizeCutCanvas() {
+if (!cutCanvas) return;
+cutCanvas.width = cakeStage.clientWidth;
+cutCanvas.height = cakeStage.clientHeight;
+drawCutLines(cutTime / CUT_DURATION);
+}
+
+function buildFlowerBorder() {
+var tileCount = Math.max(8, Math.ceil(window.innerWidth / 200));
+for (var i = 0; i < tileCount; i++) {
+var tile = document.createElement('div');
+tile.className = 'flower-tile';
+tile.style.transitionDelay = (i * 0.08) + 's';
+flowerBorder.appendChild(tile);
+}
+}
+
+function buildSlots() {
+SLOT_POSITIONS.forEach(function(pos, i) {
+var slot = document.createElement('div');
+slot.className = 'slot';
+slot.dataset.idx = i;
+slot.style.left = pos.x + '%';
+slot.style.top = pos.y + '%';
+cakeStage.appendChild(slot);
+});
+}
+
+function buildTrayCandles() {
+for (var i = 0; i < TOTAL_CANDLES; i++) {
+var candle = document.createElement('img');
+candle.className = 'tray-candle';
+candle.src = IMAGES.candle;
+candle.dataset.idx = i;
+candle.draggable = false;
+(function(c) {
+c.addEventListener('pointerdown', function(e) { startCandleDrag(e, c); });
+})(candle);
+tray.appendChild(candle);
+}
+}
+
+function createFloatingHearts() {
+var positions = [
+{ left: '8%', top: '55%' }, { left: '15%', top: '35%' },
+{ left: '12%', top: '70%' }, { left: '5%', top: '45%' },
+{ left: '18%', top: '60%' }, { left: '20%', top: '40%' },
+{ left: '75%', top: '65%' }, { left: '85%', top: '75%' }
+ ];
+positions.forEach(function(pos, i) {
+var heart = document.createElement('img');
+heart.className = 'floating-heart';
+heart.src = IMAGES.heart;
+heart.style.left = pos.left;
+heart.style.top = pos.top;
+heart.style.animationDelay = (i * 0.5) + 's';
+heartsContainer.appendChild(heart);
+});
+}
+
+// ===== Stage 1: Candle Drag and Drop =====
+function startCandleDrag(e, candle) {
+if (candle.classList.contains('used') || currentStage !== 0) return;
+e.preventDefault();
+
+var rect = candle.getBoundingClientRect();
+var ghost = document.createElement('img');
+ghost.src = IMAGES.candle;
+ghost.className = 'dragging-ghost';
+ghost.style.width = rect.width + 'px';
+ghost.style.height = rect.height + 'px';
+ghost.style.left = rect.left + 'px';
+ghost.style.top = rect.top + 'px';
+document.body.appendChild(ghost);
+
+candle.classList.add('dragging-source');
+dragState = { candle: candle, ghost: ghost, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
+
+if (placedCount === 0) progressEl.classList.add('show');
+updateProgress();
+
+document.addEventListener('pointermove', onCandleDragMove);
+document.addEventListener('pointerup', onCandleDragEnd);
+document.addEventListener('pointercancel', onCandleDragEnd);
+}
+
+function onCandleDragMove(e) {
+if (!dragState) return;
+e.preventDefault();
+dragState.ghost.style.left = (e.clientX - dragState.offsetX) + 'px';
+dragState.ghost.style.top = (e.clientY - dragState.offsetY) + 'px';
+
+var nearest = findNearestSlot(e.clientX, e.clientY);
+document.querySelectorAll('.slot').forEach(function(s) { s.classList.remove('hover'); });
+if (nearest && nearest.dist < 80) nearest.slot.classList.add('hover');
+}
+
+function onCandleDragEnd(e) {
+if (!dragState) return;
+document.removeEventListener('pointermove', onCandleDragMove);
+document.removeEventListener('pointerup', onCandleDragEnd);
+document.removeEventListener('pointercancel', onCandleDragEnd);
+
+var candle = dragState.candle;
+var ghost = dragState.ghost;
+var nearest = findNearestSlot(e.clientX, e.clientY);
+document.querySelectorAll('.slot').forEach(function(s) { s.classList.remove('hover'); });
+
+if (nearest && nearest.dist < 80) {
+placeCandle(candle, nearest.slot);
+ghost.remove();
+} else {
+candle.classList.remove('dragging-source');
+ghost.remove();
+}
+dragState = null;
+}
+
+function findNearestSlot(x, y) {
+var nearest = null, minDist = Infinity;
+document.querySelectorAll('.slot').forEach(function(slot) {
+if (slot.classList.contains('filled')) return;
+var r = slot.getBoundingClientRect();
+var cx = r.left + r.width / 2;
+var cy = r.top + r.height / 2;
+var d = Math.hypot(x - cx, y - cy);
+if (d < minDist) { minDist = d; nearest = slot; }
+});
+return nearest ? { slot: nearest, dist: minDist } : null;
+}
+
+function placeCandle(candle, slot) {
+candle.classList.add('used');
+slot.classList.add('filled');
+
+var placed = document.createElement('div');
+placed.className = 'placed-candle';
+placed.style.left = slot.style.left;
+placed.style.top = slot.style.top;
+
+var anim = document.createElement('div');
+anim.className = 'candle-anim';
+var img = document.createElement('img');
+img.src = IMAGES.candle;
+anim.appendChild(img);
+placed.appendChild(anim);
+cakeStage.appendChild(placed);
+
+placedCount++;
+updateProgress();
+createSparkleAtPoint(parseFloat(slot.style.left), parseFloat(slot.style.top), cakeStage);
+
+if (placedCount === TOTAL_CANDLES) {
+setTimeout(function() {
+progressEl.classList.remove('show');
+hideMessage();
+}, 600);
+setTimeout(function() { tray.classList.add('hide'); }, 1200);
+setTimeout(function() { startMagicAwakening(); }, 1800);
+}
+}
+
+function updateProgress() {
+progressEl.textContent = placedCount + ' / ' + TOTAL_CANDLES + ' Candles Added';
+}
+
+function createSparkleAtPoint(xPercent, yPercent, container) {
+var rect = container.getBoundingClientRect();
+var cx = rect.left + (xPercent / 100) * rect.width;
+var cy = rect.top + (yPercent / 100) * rect.height;
+for (var i = 0; i < 6; i++) {
+var sparkle = document.createElement('div');
+sparkle.className = 'sparkle';
+sparkle.textContent = '\u2728';
+sparkle.style.left = (cx - 9 + (Math.random() - 0.5) * 40) + 'px';
+sparkle.style.top = (cy - 9 + (Math.random() - 0.5) * 40) + 'px';
+sparkle.style.animationDelay = (i * 0.05) + 's';
+document.body.appendChild(sparkle);
+setTimeout(function(s) { return function() { s.remove(); }; }(sparkle), 1500);
+}
+}
+
+// ===== Stage 2: Magic Awakening =====
+function startMagicAwakening() {
+currentStage = 1;
+showMessage('The magic awakens...');
+
+var placedCandles = document.querySelectorAll('.placed-candle');
+placedCandles.forEach(function(c, i) {
+setTimeout(function() {
+c.classList.add('lit');
+var rect = c.getBoundingClientRect();
+var cx = rect.left + rect.width / 2;
+var cy = rect.top;
+for (var j = 0; j < 4; j++) {
+var sparkle = document.createElement('div');
+sparkle.className = 'sparkle';
+sparkle.textContent = '\u2728';
+sparkle.style.left = (cx - 9 + (Math.random() - 0.5) * 30) + 'px';
+sparkle.style.top = (cy - 9 + (Math.random() - 0.5) * 30) + 'px';
+document.body.appendChild(sparkle);
+setTimeout(function(s) { return function() { s.remove(); }; }(sparkle), 1200);
+}
+}, i * 500);
+});
+
+setTimeout(function() { cakeGlow.classList.add('show'); }, 1500);
+setTimeout(function() {
+showMessage('Now make a wish and cut the cake.');
+showKnife();
+currentStage = 2;
+startCuttingLoop();
+}, 4000);
+}
+
+// ===== Stage 3 & 4: Knife Drag and Cake Cutting =====
+function showKnife() {
+knife.classList.add('show');
+setTimeout(function() { if (knifeHint) knifeHint.style.display = 'none'; }, 4000);
+}
+
+function setupKnifeDrag() {
+knife.addEventListener('pointerdown', startKnifeDrag);
+}
+
+function startKnifeDrag(e) {
+if (!knife.classList.contains('show') || cakeCut) return;
+e.preventDefault();
+
+var rect = knife.getBoundingClientRect();
+knifeDrag = {
+offsetX: e.clientX - rect.left,
+offsetY: e.clientY - rect.top
+};
+
+knife.classList.add('dragging');
+knife.style.position = 'fixed';
+knife.style.left = rect.left + 'px';
+knife.style.top = rect.top + 'px';
+knife.style.right = 'auto';
+knife.style.bottom = 'auto';
+
+if (knifeHint) knifeHint.style.display = 'none';
+cakeSlice.classList.add('active');
+
+document.addEventListener('pointermove', onKnifeMove);
+document.addEventListener('pointerup', onKnifeEnd);
+document.addEventListener('pointercancel', onKnifeEnd);
+}
+
+function onKnifeMove(e) {
+if (!knifeDrag) return;
+e.preventDefault();
+
+knife.style.left = (e.clientX - knifeDrag.offsetX) + 'px';
+knife.style.top = (e.clientY - knifeDrag.offsetY) + 'px';
+lastMoveTime = performance.now();
+
+var knifeRect = knife.getBoundingClientRect();
+var tipX = knifeRect.left + knifeRect.width * 0.95;
+var tipY = knifeRect.top + knifeRect.height * 0.50;
+
+var cakeRect = cake.getBoundingClientRect();
+var localX = (tipX - cakeRect.left) / cakeRect.width;
+var localY = (tipY - cakeRect.top) / cakeRect.height;
+
+var v1 = { x: 0.45, y: 0.65 };
+var v2 = { x: 0.85, y: 0.45 };
+var v3 = { x: 0.98, y: 0.90 };
+
+isInside = pointInTriangle({ x: localX, y: localY }, v1, v2, v3);
+}
+
+function onKnifeEnd(e) {
+if (!knifeDrag) return;
+document.removeEventListener('pointermove', onKnifeMove);
+document.removeEventListener('pointerup', onKnifeEnd);
+document.removeEventListener('pointercancel', onKnifeEnd);
+
+knife.classList.remove('dragging');
+
+if (!cakeCut) {
+knife.style.transition = 'left 0.4s, top 0.4s, transform 0.4s';
+knife.style.position = 'absolute';
+knife.style.left = 'auto';
+knife.style.top = '42%';
+knife.style.right = '8%';
+knife.style.bottom = 'auto';
+setTimeout(function() { knife.style.transition = 'opacity 0.8s, transform 0.8s'; }, 400);
+}
+knifeDrag = null;
+isInside = false;
+}
+
+function sign(p1, p2, p3) {
+return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+}
+
+function pointInTriangle(pt, v1, v2, v3) {
+var d1 = sign(pt, v1, v2);
+var d2 = sign(pt, v2, v3);
+var d3 = sign(pt, v3, v1);
+var has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+var has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+return !(has_neg && has_pos);
+}
+
+function startCuttingLoop() {
+lastFrameTime = performance.now();
+function loop(timestamp) {
+if (cakeCut) return;
+var delta = timestamp - lastFrameTime;
+lastFrameTime = timestamp;
+
+if (knifeDrag && (timestamp - lastMoveTime < 150) && isInside) {
+cutTime += delta;
+if (cutTime > CUT_DURATION) cutTime = CUT_DURATION;
+} else {
+cutTime -= delta * 0.5;
+if (cutTime < 0) cutTime = 0;
+}
+
+drawCutLines(cutTime / CUT_DURATION);
+updateCutMessage(cutTime);
+
+if (cutTime >= CUT_DURATION) {
+cakeCut = true;
+completeSliceCut();
+} else {
+requestAnimationFrame(loop);
+}
+}
+requestAnimationFrame(loop);
+}
+
+function drawCutLines(progress) {
+if (!cutCtx) return;
+var w = cutCanvas.width;
+var h = cutCanvas.height;
+cutCtx.clearRect(0, 0, w, h);
+
+if (progress <= 0) return;
+
+cutCtx.strokeStyle = 'rgba(120, 50, 70, 0.85)';
+cutCtx.lineWidth = 3;
+cutCtx.lineCap = 'round';
+cutCtx.shadowColor = 'rgba(120, 50, 70, 0.4)';
+cutCtx.shadowBlur = 4;
+
+// Line 1
+cutCtx.beginPath();
+cutCtx.moveTo(0.45 * w, 0.65 * h);
+var l1x = 0.45 * w + (0.85 - 0.45) * w * progress;
+var l1y = 0.65 * h + (0.45 - 0.65) * h * progress;
+cutCtx.lineTo(l1x, l1y);
+cutCtx.stroke();
+
+// Line 2
+cutCtx.beginPath();
+cutCtx.moveTo(0.45 * w, 0.65 * h);
+var l2x = 0.45 * w + (0.98 - 0.45) * w * progress;
+var l2y = 0.65 * h + (0.90 - 0.65) * h * progress;
+cutCtx.lineTo(l2x, l2y);
+cutCtx.stroke();
+}
+
+function updateCutMessage(timeMs) {
+var msg = 'Now make a wish and cut the cake.';
+if (timeMs === 0) msg = 'Now make a wish and cut the cake.';
+else if (timeMs < 500) msg = '0.0s \u2192 Start Cutting';
+else if (timeMs < 1000) msg = '0.5s \u2192 Partial Cut';
+else msg = '1.0s \u2192 Cake Slice Successfully Cut';
+
+if (messageEl.textContent !== msg) {
+messageEl.textContent = msg;
+messageEl.classList.add('show');
+}
+}
+
+function completeSliceCut() {
+currentStage = 3;
+updateCutMessage(CUT_DURATION);
+
+setTimeout(function() {
+cakeSlice.classList.add('separated');
+knife.style.transition = 'opacity 0.8s, transform 0.8s';
+knife.style.opacity = '0';
+knife.style.transform = 'rotate(45deg) translateY(-50px)';
+}, 300);
+
+hideMessage();
+setTimeout(function() { revealGarden(); }, 1800);
+}
+
+// ===== Stage 5: Gentle Garden Reveal =====
+function revealGarden() {
+currentStage = 4;
+showMessage('The garden awakens...');
+
+for (var i = 0; i < 20; i++) {
+(function(idx) {
+setTimeout(function() { createFallingPetal(); }, idx * 300);
+})(i);
+}
+
+setTimeout(function() { revealFlowerBorder(); }, 2000);
+setTimeout(function() { revealBalloons(); }, 5000);
+setTimeout(function() { revealFloatingHearts(); }, 6500);
+setTimeout(function() {
+hideMessage();
+triggerCelebration();
+}, 8000);
+}
+
+function revealFlowerBorder() { flowerBorder.classList.add('show'); }
+function revealBalloons() { balloons.classList.add('show'); }
+function revealFloatingHearts() {
+document.querySelectorAll('.floating-heart').forEach(function(h, i) {
+setTimeout(function() { h.classList.add('show'); }, i * 200);
+});
+}
+
+function createFallingPetal() {
+var petal = document.createElement('img');
+petal.src = IMAGES.heart;
+var rightPos = 10 + Math.random() * 20;
+var duration = 3 + Math.random() * 4;
+petal.style.cssText = 'position:fixed;width:12px;right:' + rightPos + '%;opacity:0.8;z-index:9;pointer-events:none;animation:petalFall ' + duration + 's linear forwards;';
+document.body.appendChild(petal);
+setTimeout(function() { petal.remove(); }, 8000);
+}
+
+// ===== Stage 6: Fireworks Celebration =====
+var canvas, ctx, fireworks = [], confetti = [];
+var animationActive = false;
+var FIREWORK_COLORS = ['#ff5c8a', '#ff8aa8', '#ffd700', '#ffffff', '#ff3366', '#ffb3c6'];
+
+function setupCanvas() {
+canvas = document.getElementById('fireworks');
+ctx = canvas.getContext('2d');
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+}
+
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+
+function triggerCelebration() {
+currentStage = 5;
+showMessage('Happy Birthday!');
+
+setTimeout(function() {
+if (currentStage === 5) {
+celebrationHint.classList.add('show');
+}
+}, 3000);
+
+celebrationInterval = setInterval(function() {
+var x = window.innerWidth * (0.15 + Math.random() * 0.7);
+var targetY = window.innerHeight * (0.1 + Math.random() * 0.3);
+fireworks.push(new Firework(x, targetY));
+}, 700);
+
+setInterval(function() {
+if (currentStage === 5) {
+for (var i = 0; i < 15; i++) confetti.push(new Confetti());
+}
+}, 1000);
+
+for (var i = 0; i < 3; i++) {
+(function(idx) {
+setTimeout(function() {
+var x = window.innerWidth * (0.2 + Math.random() * 0.6);
+var targetY = window.innerHeight * (0.15 + Math.random() * 0.25);
+fireworks.push(new Firework(x, targetY));
+}, idx * 800);
+})(i);
+}
+
+if (!animationActive) {
+animationActive = true;
+animateFireworks();
+}
+
+document.body.addEventListener('pointerdown', handleCelebrationTap);
+}
+
+function handleCelebrationTap() {
+if (currentStage !== 5) return;
+tapCount++;
+
+if (tapCount === 1) {
+celebrationHint.textContent = 'Tap 1 more time to continue';
+} else if (tapCount >= 2) {
+currentStage = 6;
+clearInterval(celebrationInterval);
+document.body.removeEventListener('pointerdown', handleCelebrationTap);
+celebrationHint.classList.remove('show');
+hideMessage();
+
+setTimeout(function() {
+finalCard.classList.add('show');
+}, 1500);
+}
+}
+
+function Firework(x, targetY) {
+this.x = x;
+this.y = window.innerHeight;
+this.targetY = targetY;
+this.vy = -(10 + Math.random() * 4);
+this.exploded = false;
+this.particles = [];
+this.color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+this.trail = [];
+}
+Firework.prototype.update = function() {
+if (!this.exploded) {
+this.y += this.vy;
+this.vy += 0.18;
+this.trail.push({ x: this.x, y: this.y, life: 1 });
+if (this.trail.length > 8) this.trail.shift();
+this.trail.forEach(function(t) { t.life -= 0.12; });
+if (this.y <= this.targetY || this.vy >= 0) this.explode();
+} else {
+this.particles.forEach(function(p) { p.update(); });
+this.particles = this.particles.filter(function(p) { return p.life > 0; });
+}
+};
+Firework.prototype.explode = function() {
+this.exploded = true;
+var count = 35 + Math.floor(Math.random() * 25);
+var isHeartBurst = Math.random() < 0.5;
+for (var i = 0; i < count; i++) {
+this.particles.push(new Particle(this.x, this.y, this.color, isHeartBurst));
+}
+};
+Firework.prototype.draw = function(c) {
+if (!this.exploded) {
+this.trail.forEach(function(t) {
+if (t.life > 0) {
+c.fillStyle = 'rgba(255,240,200,' + (t.life * 0.6) + ')';
+c.beginPath();
+c.arc(t.x, t.y, 2.5, 0, Math.PI * 2);
+c.fill();
+}
+});
+c.fillStyle = this.color;
+c.shadowColor = this.color;
+c.shadowBlur = 10;
+c.beginPath();
+c.arc(this.x, this.y, 3.5, 0, Math.PI * 2);
+c.fill();
+c.shadowBlur = 0;
+} else {
+this.particles.forEach(function(p) { p.draw(c); });
+}
+};
+Firework.prototype.isDead = function() { return this.exploded && this.particles.length === 0; };
+
+function Particle(x, y, color, isHeart) {
+this.x = x;
+this.y = y;
+var angle = Math.random() * Math.PI * 2;
+var speed = 2 + Math.random() * 5;
+this.vx = Math.cos(angle) * speed;
+this.vy = Math.sin(angle) * speed;
+this.life = 1;
+this.color = color;
+this.size = 2 + Math.random() * 2.5;
+this.isHeart = isHeart && Math.random() < 0.4;
+this.rotation = Math.random() * Math.PI * 2;
+this.rotSpeed = (Math.random() - 0.5) * 0.2;
+}
+Particle.prototype.update = function() {
+this.x += this.vx;
+this.y += this.vy;
+this.vy += 0.08;
+this.vx *= 0.99;
+this.life -= 0.011;
+this.rotation += this.rotSpeed;
+};
+Particle.prototype.draw = function(c) {
+if (this.life <= 0) return;
+c.globalAlpha = Math.max(0, this.life);
+c.fillStyle = this.color;
+c.shadowColor = this.color;
+c.shadowBlur = 8;
+if (this.isHeart) {
+c.save();
+c.translate(this.x, this.y);
+c.rotate(this.rotation);
+var s = this.size * 1.5;
+c.beginPath();
+c.moveTo(0, s * 0.3);
+c.bezierCurveTo(-s, -s * 0.5, -s * 0.5, -s, 0, -s * 0.3);
+c.bezierCurveTo(s * 0.5, -s, s, -s * 0.5, 0, s * 0.3);
+c.fill();
+c.restore();
+} else {
+c.beginPath();
+c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+c.fill();
+}
+c.shadowBlur = 0;
+c.globalAlpha = 1;
+};
+
+function Confetti() {
+this.x = Math.random() * window.innerWidth;
+this.y = -20 - Math.random() * 200;
+this.vx = (Math.random() - 0.5) * 3;
+this.vy = 2 + Math.random() * 3;
+this.size = 5 + Math.random() * 6;
+this.color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+this.rotation = Math.random() * Math.PI * 2;
+this.rotSpeed = (Math.random() - 0.5) * 0.3;
+this.life = 1;
+this.shape = Math.random() < 0.3 ? 'heart' : 'rect';
+}
+Confetti.prototype.update = function() {
+this.x += this.vx;
+this.y += this.vy;
+this.vx += (Math.random() - 0.5) * 0.1;
+this.rotation += this.rotSpeed;
+if (this.y > window.innerHeight) this.life = 0;
+};
+Confetti.prototype.draw = function(c) {
+if (this.life <= 0) return;
+c.save();
+c.translate(this.x, this.y);
+c.rotate(this.rotation);
+c.fillStyle = this.color;
+if (this.shape === 'heart') {
+var s = this.size;
+c.beginPath();
+c.moveTo(0, s * 0.3);
+c.bezierCurveTo(-s, -s * 0.5, -s * 0.5, -s, 0, -s * 0.3);
+c.bezierCurveTo(s * 0.5, -s, s, -s * 0.5, 0, s * 0.3);
+c.fill();
+} else {
+c.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+}
+c.restore();
+};
+Confetti.prototype.isDead = function() { return this.life <= 0; };
+
+function animateFireworks() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+fireworks.forEach(function(fw) { fw.update(); fw.draw(ctx); });
+fireworks = fireworks.filter(function(fw) { return !fw.isDead(); });
+
+confetti.forEach(function(c) { c.update(); c.draw(ctx); });
+confetti = confetti.filter(function(c) { return !c.isDead(); });
+
+if (fireworks.length > 0 || confetti.length > 0 || currentStage === 5) {
+requestAnimationFrame(animateFireworks);
+} else {
+animationActive = false;
+}
+}
+
+// ===== Message Helpers =====
+function showMessage(text) {
+messageEl.textContent = text;
+messageEl.classList.remove('hide');
+setTimeout(function() { messageEl.classList.add('show'); }, 50);
+}
+function hideMessage() {
+messageEl.classList.remove('show');
+messageEl.classList.add('hide');
+}
+
+// ===== Start =====
+window.addEventListener('load', init);
+</script>
+
+<script>
+// ===== Background Music - plays on first user interaction =====
+(function() {
+    var bgMusic = document.getElementById('bgMusic');
+    var musicStarted = false;
+
+    function tryPlayMusic() {
+        if (musicStarted) return;
+        musicStarted = true;
+        bgMusic.volume = 0.6;
+        var playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(function() {
+                musicStarted = false;
+            });
+        }
+    }
+
+    document.addEventListener('pointerdown', tryPlayMusic, { once: false });
+    document.addEventListener('touchstart', tryPlayMusic, { once: false });
+})();
+</script>
+
+</body>
+</html>
